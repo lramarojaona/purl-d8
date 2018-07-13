@@ -1,13 +1,6 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: bez
- * Date: 2016-02-04
- * Time: 5:04 PM
- */
 
 namespace Drupal\purl;
-
 
 use Drupal\Core\DependencyInjection\ContainerBuilder;
 use Drupal\Core\DependencyInjection\ServiceProviderBase;
@@ -33,11 +26,6 @@ class PurlServiceProvider extends ServiceProviderBase
     $assemblerDefinition->setClass(PurlAwareUnroutedUrlAssembler::class);
     $assemblerDefinition->addArgument(new Reference('purl.context_helper'));
     $assemblerDefinition->addArgument(new Reference('purl.matched_modifiers'));
-
-    $routerDefinition = $container->getDefinition('router.route_provider');
-    $routerDefinition->setClass(PurlRouteProvider::class);
-    $routerDefinition->addArgument(new Reference('purl.context_helper'));
-    $routerDefinition->addArgument(new Reference('purl.matched_modifiers'));
 
     if ($container->hasDefinition('http_middleware.page_cache')) {
       $pageCacheDefinition = $container->getDefinition('http_middleware.page_cache');
