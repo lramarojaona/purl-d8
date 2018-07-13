@@ -61,6 +61,7 @@ class RequestSubscriber implements EventSubscriberInterface
   {
     $request = $event->getRequest();
     $modifiers = $this->getModifiers();
+    $original_uri = $request->getRequestUri();
 
     $matches = array();
 
@@ -104,6 +105,7 @@ class RequestSubscriber implements EventSubscriberInterface
     }
 
     $request->attributes->set('purl.matched_modifiers', $matches);
+    $request->attributes->set('original_uri', $original_uri);
   }
 
   /**

@@ -5,6 +5,7 @@ namespace Drupal\purl\Routing;
 use Drupal\Core\Cache\Cache;
 use Drupal\Core\Cache\CacheBackendInterface;
 use Drupal\Core\Cache\CacheTagsInvalidatorInterface;
+use Drupal\Core\Language\LanguageManagerInterface;
 use Drupal\Core\Path\CurrentPathStack;
 use Drupal\Core\Path\PathValidator;
 use Drupal\Core\PathProcessor\InboundPathProcessorInterface;
@@ -108,7 +109,10 @@ class PurlRouteProvider extends RouteProvider {
    * @param \Drupal\Core\Cache\CacheTagsInvalidatorInterface $cache_tag_invalidator
    *   The cache tag invalidator.
    * @param string $table
-   *   (Optional) The table in the database to use for matching. Defaults to 'router'
+   *   (Optional) The table in the database to use for matching. Defaults to
+   *   'router'.
+   * @param \Drupal\Core\Language\LanguageManagerInterface $language_manager
+   *   (Optional) The language manager.
    */
   public function __construct(
     Connection $connection,
@@ -117,10 +121,12 @@ class PurlRouteProvider extends RouteProvider {
     CacheBackendInterface $cache_backend,
     InboundPathProcessorInterface $path_processor,
     CacheTagsInvalidatorInterface $cache_tag_invalidator,
+    $table = 'router',
+    LanguageManagerInterface $language_manager = NULL,
     ContextHelper $contextHelper,
     MatchedModifiers $matchedModifiers
   ) {
-    parent::__construct($connection, $state, $current_path, $cache_backend, $path_processor, $cache_tag_invalidator);
+    parent::__construct($connection, $state, $current_path, $cache_backend, $path_processor, $cache_tag_invalidator, $table, $language_manager);
     $this->contextHelper = $contextHelper;
     $this->matchedModifiers = $matchedModifiers;
   }
@@ -155,12 +161,14 @@ class PurlRouteProvider extends RouteProvider {
       // Incoming path processors may also set query parameters.
       $query_parameters = $request->query->all();
       $routes = $this->getRoutesByPath(rtrim($path, '/'));
-      $cache_value = [
-        'path' => $path,
-        'query' => $query_parameters,
-        'routes' => $routes,
-      ];
-      $this->cache->set($cid, $cache_value, CacheBackendInterface::CACHE_PERMANENT, ['route_match']);
+      if (!empty($routes->count())) {
+        $cache_value = [
+          'path' => $path,
+          'query' => $query_parameters,
+          'routes' => $routes,
+        ];
+        $this->cache->set($cid, $cache_value, CacheBackendInterface::CACHE_PERMANENT, ['route_match']);
+      }
       return $routes;
     }
   }

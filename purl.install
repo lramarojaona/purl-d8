@@ -1,58 +1,69 @@
 <?php
 
-function purl_schema()
-{
-    $schema = array();
+/**
+ * Implements hook_schema().
+ */
+function purl_schema() {
+  // Flush all caches to prevent the 'Plugin not found'-exception on install.
+  drupal_flush_all_caches();
 
-    $schema['purl_providers_settings'] = array(
-        'fields' => array(
-            'provider' => array(
-                'type' => 'varchar',
-                'length' => 150,
-                'not null' => true,
-            ),
-            'method' => array(
-                'type' => 'varchar',
-                'length' => 255,
-                'not null' => true,
-            ),
-            'settings' => array(
-                'type' => 'text',
-                'not null' => true,
-                'mysql_type' => 'mediumtext',
-            ),
-            'rebuild' => array(
-                'type' => 'int',
-                //'size' => 'tinyint',
-                'default' => 0,
-            ),
-        ),
-        'primary key' => array('provider'),
-        'description' => 'PURL provider settings',
+  $schema['purl_providers_settings'] = array(
+    'fields' => array(
+      'provider' => array(
+        'description' => '',
+        'type' => 'varchar',
+        'length' => 255,
+        'not null' => TRUE,
+      ),
+      'method' => array(
+        'description' => '',
+        'type' => 'varchar',
+        'length' => 255,
+        'not null' => TRUE,
+      ),
+      'settings' => array(
+        'description' => '',
+        'type' => 'text',
+        'not null' => TRUE,
+        'size' => 'medium',
+      ),
+      'rebuild' => array(
+        'description' => '',
+        'type' => 'int',
+        'size' => 'tiny',
+        'not null' => TRUE,
+        'default' => 0,
+      ),
+    ),
+    'primary key' => array(array('provider', 191)),
+    'description' => 'PURL provider settings',
     );
 
-    $schema['purl_modifiers'] = array(
-        'fields' => array(
-            'provider' => array(
-                'type' => 'varchar',
-                'length' => 150,
-                'not null' => true,
-            ),
-            'modifier' => array(
-                'type' => 'varchar',
-                'length' => 150,
-                'not null' => true,
-            ),
-            'value' => array(
-                'type' => 'text',
-                'not null' => true,
-                'mysql_type' => 'mediumtext',
-            ),
-        ),
-        'primary key' => array('provider', 'modifier'),
-        'description' => 'Index of PURL modifiers',
-    );
+  $schema['purl_modifiers'] = array(
+    'fields' => array(
+      'provider' => array(
+        'description' => '',
+        'type' => 'varchar',
+        'length' => 255,
+        'not null' => TRUE,
+      ),
+      'modifier' => array(
+        'description' => '',
+        'type' => 'varchar',
+        'length' => 255,
+        'not null' => TRUE,
+      ),
+      'value' => array(
+        'description' => '',
+        'type' => 'text',
+        'not null' => TRUE,
+        'mysql_type' => 'mediumtext',
+      ),
+    ),
+    'primary key' => array(array('provider', 191), array('modifier', 191)),
+    'description' => 'Index of PURL modifiers',
+  );
 
-    return $schema;
+  return $schema;
 }
 

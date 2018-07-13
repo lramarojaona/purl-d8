@@ -20,7 +20,7 @@ class PurlMethod extends Plugin
         }
 
         if (!isset($this->definition['stages'])) {
-          $this->definition['stage'] = [MethodInterface::STAGE_PROCESS_OUTBOUND];
+          $this->definition['stages'] = [MethodInterface::STAGE_PROCESS_OUTBOUND];
         }
     }
 }

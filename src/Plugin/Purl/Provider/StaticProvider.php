@@ -12,7 +12,7 @@ use Drupal\purl\Annotation\PurlProvider;
  */
 class StaticProvider extends ProviderAbstract
 {
-    public function getModifiers()
+    public function getModifierData()
     {
         return array(
             'un' => 1,
