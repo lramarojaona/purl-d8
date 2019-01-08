@@ -17,7 +17,7 @@ services:
 
   purl.request_subscriber:
     class: Drupal\purl\Event\RequestSubscriber
-    arguments: 
+    arguments:
       - '@purl.modifier_index'
       - '@purl.matched_modifiers'
     tags:
@@ -29,11 +29,6 @@ services:
     tags:
       - { name: event_subscriber }
 
-  purl.provider_storage:
-    class: Drupal\Core\Entity\EntityStorageInterface
-    factory: ['@entity.manager', getStorage]
-    arguments: ['purl_provider']
-
   cache_context.purl:
     class: Drupal\purl\Cache\Context\PurlCacheContext
     tags:
@@ -42,14 +37,14 @@ services:
 
   purl.rebuild_index:
     class: Drupal\purl\Event\RebuildIndex
-    arguments: 
+    arguments:
       - '@purl.modifier_index'
     tags:
       - { name: event_subscriber }
 
   purl.outbound_path_processor:
     class: Drupal\purl\PathProcessor\PurlContextOutboundPathProcessor
-    arguments: 
+    arguments:
       - '@purl.matched_modifiers'
       - '@purl.context_helper'
     tags:
@@ -78,4 +73,11 @@ services:
 
   purl.context_helper:
     class: Drupal\purl\ContextHelper
-    arguments: ['@purl.provider_storage']
+    arguments: ['@entity_type.manager']
+
+  purl.route_provider:
+    class: Drupal\purl\Routing\PurlRouteProvider
+    public: false
+    decorates: router.route_provider
+    decoration_priority: 5
+    arguments: ['@database', '@state', '@path.current', '@cache.data', '@path_processor_manager', '@cache_tags.invalidator', 'router', '@language_manager', '@purl.context_helper', '@purl.matched_modifiers']

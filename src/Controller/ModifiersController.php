@@ -45,9 +45,6 @@ class ModifiersController extends BaseController
   {
     $build = array();
 
-    $ids = \Drupal::entityQuery('purl_provider')
-      ->execute();
-
     $headers = array('provider', 'modifier', 'value');
 
     $headers = array_map(function ($header) {
@@ -56,9 +53,9 @@ class ModifiersController extends BaseController
 
     $rows = array();
 
-    foreach ($this->modifierIndex->findModifiers() as $modifier) {
+    foreach ($this->modifierIndex->findAll() as $modifier) {
 
-      $provider = $modifier['provider'];
+      $provider = $modifier->getProvider();
 
       if (!$provider) {
         continue;
@@ -67,14 +64,14 @@ class ModifiersController extends BaseController
       $row = array();
 
       $row[] = array(
-        'data' => $provider->getLabel()
+        'data' => $provider->getLabel(),
       );
 
       $row[] = array(
         'data' => array(
           '#type' => 'html_tag',
           '#tag' => 'code',
-          '#value' => $modifier['modifier'],
+          '#value' => $modifier->getModifierKey(),
         ),
       );
 
@@ -82,13 +79,12 @@ class ModifiersController extends BaseController
         'data' => array(
           '#type' => 'html_tag',
           '#tag' => 'code',
-          '#value' => $this->stringify($modifier['value']),
+          '#value' => $this->stringify($modifier->getValue()),
         ),
       );
 
       $rows[] = $row;
     }
-
 
     $build['modifiers'] = array(
       '#theme' => 'table',

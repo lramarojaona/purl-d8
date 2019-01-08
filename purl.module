@@ -8,49 +8,6 @@ use Drupal\purl\Entity\Provider;
 use Drupal\node\NodeTypeInterface;
 use Drupal\Core\Form;
 
-function purl_entity_base_field_info(EntityTypeInterface $entity_type) {
-
-  if ($entity_type->id() !== 'menu_link_content') {
-    return;
-  }
-
-  $fields = [];
-
-  /* @todo Remove this; we don't need these extra fields anymore */
-
-  $fields['purl_provider'] = BaseFieldDefinition::create('entity_reference')
-    ->setLabel(t('PURL provider'))
-    ->setName('purl_provider')
-    ->setRevisionable(false)
-    ->setTranslatable(false)
-    ->setDescription('PURL provider')
-    ->setSettings([
-      'target_type' => 'purl_provider',
-      'default_value' => null,
-    ]);
-
-  $fields['purl_modifier'] = BaseFieldDefinition::create('string')
-    ->setLabel(t('PURL modifier'))
-    ->setName('purl_modifier')
-    ->setRevisionable(false)
-    ->setDescription('PURL modififer')
-    ->setSettings([
-      'default_value' => null,
-      'max_length' => 255,
-    ]);
-
-  $fields['purl_strip_context'] = BaseFieldDefinition::create('boolean')
-    ->setLabel(t('PURL strip context'))
-    ->setName('purl_strip_context')
-    ->setRevisionable(false)
-    ->setDescription('PURL strip context')
-    ->setSettings([
-      'default_value' => false,
-    ]);
-
-  return $fields;
-}
-
 function purl_form_menu_edit_form_alter(&$form, $form_state) {
   $providers = Provider::loadMultiple();
 

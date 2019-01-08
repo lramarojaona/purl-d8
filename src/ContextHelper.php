@@ -2,7 +2,7 @@
 
 namespace Drupal\purl;
 
-use Drupal\Core\Entity\EntityStorageInterface;
+use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Render\BubbleableMetadata;
 use Drupal\purl\Entity\Provider;
 use Drupal\purl\Plugin\Purl\Method\MethodInterface;
@@ -12,13 +12,18 @@ class ContextHelper
 {
 
   /**
-   * @var EntityStorageInterface
+   * @var \Drupal\Core\Entity\EntityTypeManagerInterface
    */
-  protected $storage;
+  protected $entityTypeManager;
 
-  public function __construct(EntityStorageInterface $storage)
+  /**
+   * ContextHelper constructor.
+   *
+   * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entity_type_manager
+   */
+  public function __construct(EntityTypeManagerInterface $entity_type_manager)
   {
-    $this->storage = $storage;
+    $this->entityTypeManager = $entity_type_manager;
   }
 
   /**
@@ -105,7 +110,7 @@ class ContextHelper
       return [];
     }
 
-    $providers = $this->storage->loadMultiple(array_keys($map));
+    $providers = $this->entityTypeManager->getStorage('purl_provider')->loadMultiple(array_keys($map));
 
     return array_map(function (Provider $provider) use ($map) {
       return new Context($map[$provider->id()], $provider->getMethodPlugin());
