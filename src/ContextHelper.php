@@ -2,7 +2,7 @@
 
 namespace Drupal\purl;
 
-use Drupal\Core\Entity\EntityTypeManager;
+use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Render\BubbleableMetadata;
 use Drupal\purl\Entity\Provider;
 use Drupal\purl\Plugin\Purl\Method\MethodInterface;
@@ -12,16 +12,16 @@ class ContextHelper
 {
 
   /**
-   * @var \Drupal\Core\Entity\EntityTypeManager
+   * @var \Drupal\Core\Entity\EntityTypeManagerInterface
    */
   protected $entityTypeManager;
 
   /**
    * ContextHelper constructor.
    *
-   * @param \Drupal\Core\Entity\EntityTypeManager $entity_type_manager
+   * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entity_type_manager
    */
-  public function __construct(EntityTypeManager $entity_type_manager)
+  public function __construct(EntityTypeManagerInterface $entity_type_manager)
   {
     $this->entityTypeManager = $entity_type_manager;
   }
