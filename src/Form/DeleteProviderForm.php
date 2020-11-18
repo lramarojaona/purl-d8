@@ -9,7 +9,6 @@ use Drupal\Core\Form\FormStateInterface;
 /**
  * Builds the form to delete a Provider.
  */
-
 class DeleteProviderForm extends EntityConfirmFormBase {
 
   /**
@@ -42,4 +41,5 @@ class DeleteProviderForm extends EntityConfirmFormBase {
 
     $form_state->setRedirectUrl($this->getCancelUrl());
   }
+
 }

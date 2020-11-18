@@ -4,16 +4,14 @@ namespace Drupal\purl;
 
 use Drupal\Core\DependencyInjection\ContainerBuilder;
 use Drupal\Core\DependencyInjection\ServiceProviderBase;
-use Drupal\purl\Routing\PurlRouteProvider;
 use Drupal\purl\Utility\PurlAwareUnroutedUrlAssembler;
 use Drupal\purl\StackMiddleware\PageCache;
 use Drupal\purl\Event\RouteNormalizerRequestSubscriber;
 use Symfony\Component\DependencyInjection\Reference;
 
-class PurlServiceProvider extends ServiceProviderBase
-{
-  public function alter(ContainerBuilder $container)
-  {
+class PurlServiceProvider extends ServiceProviderBase {
+
+  public function alter(ContainerBuilder $container) {
     $urlGeneratorDefinition = $container->getDefinition('url_generator');
     $urlGeneratorDefinition->replaceArgument(0, new Reference('purl.url_generator'));
 
@@ -32,4 +30,5 @@ class PurlServiceProvider extends ServiceProviderBase
       $pageCacheDefinition->setClass(PageCache::class);
     }
   }
+
 }

@@ -2,8 +2,9 @@
 
 namespace Drupal\purl\Plugin;
 
-interface MethodPluginManagerInterface
-{
+
+interface MethodPluginManagerInterface {
+
   /**
    * @param string $id
    * @return Drupal\purl\Plugin\Purl\Context\MethodPluginInterface
@@ -15,4 +16,5 @@ interface MethodPluginManagerInterface
    * @return boolen
    */
   public function hasMethodPlugin($id);
+
 }

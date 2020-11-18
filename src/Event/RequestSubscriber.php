@@ -4,9 +4,7 @@ namespace Drupal\purl\Event;
 
 use Drupal\purl\Entity\Provider;
 use Drupal\purl\MatchedModifiers;
-use Drupal\purl\Plugin\MethodPluginManager;
 use Drupal\purl\Plugin\ModifierIndex;
-use Drupal\purl\Plugin\ProviderManager;
 use Drupal\purl\Plugin\Purl\Method\RequestAlteringInterface;
 use Drupal\purl\PurlEvents;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
@@ -15,29 +13,26 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Event\GetResponseEvent;
 use Symfony\Component\HttpKernel\KernelEvents;
 
-class RequestSubscriber implements EventSubscriberInterface
-{
+class RequestSubscriber implements EventSubscriberInterface {
   /**
-   * @var ModifierIndex
+   * @var \Drupal\purl\Plugin\ModifierIndex
    */
   protected $modifierIndex;
 
   /**
-   * @var MatchedModifiers
+   * @var \Drupal\purl\MatchedModifiers
    */
   protected $matchedModifiers;
 
   public function __construct(
     ModifierIndex $modifierIndex,
     MatchedModifiers $matchedModifiers
-  )
-  {
+  ) {
     $this->modifierIndex = $modifierIndex;
     $this->matchedModifiers = $matchedModifiers;
   }
 
-  public static function getSubscribedEvents()
-  {
+  public static function getSubscribedEvents() {
     return [
       // RouterListener comes in at 32. We need to go before it.
       KernelEvents::REQUEST => ['onRequest', 50],
@@ -47,18 +42,15 @@ class RequestSubscriber implements EventSubscriberInterface
   /**
    * @return \Drupal\purl\Modifier[]
    */
-  protected function getModifiers()
-  {
+  protected function getModifiers() {
     return $this->modifierIndex->findAll();
   }
 
-  protected function getMethodForProvider($providerId)
-  {
+  protected function getMethodForProvider($providerId) {
     return Provider::load($providerId)->getMethodPlugin();
   }
 
-  public function onRequest(GetResponseEvent $event, $eventName, EventDispatcherInterface $dispatcher)
-  {
+  public function onRequest(GetResponseEvent $event, $eventName, EventDispatcherInterface $dispatcher) {
     $request = $event->getRequest();
     $modifiers = $this->getModifiers();
     $original_uri = $request->getRequestUri();
@@ -77,7 +69,7 @@ class RequestSubscriber implements EventSubscriberInterface
           'modifier' => $modifierKey,
           'provider_key' => $provider->getProviderId(),
           'provider' => $modifier->getProvider(),
-          'value' => $modifier->getValue()
+          'value' => $modifier->getValue(),
         ];
       }
     }
@@ -116,8 +108,7 @@ class RequestSubscriber implements EventSubscriberInterface
    *
    * I don't have a better solution that doesn't feel hacky.
    */
-  private function reinitializeRequest(Request $request)
-  {
+  private function reinitializeRequest(Request $request) {
     $request->initialize(
       $request->query->all(),
       $request->request->all(),
@@ -128,4 +119,5 @@ class RequestSubscriber implements EventSubscriberInterface
       $request->getContent()
     );
   }
+
 }

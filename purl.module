@@ -1,20 +1,19 @@
 <?php
 
-use Drupal\Core\Entity\EntityTypeInterface;
-use Drupal\Core\Field\BaseFieldDefinition;
+/**
+ * @file
+ */
+
 use Drupal\Core\Form\FormStateInterface;
-use Drupal\menu_link_content\Entity\MenuLinkContent;
 use Drupal\purl\Entity\Provider;
 use Drupal\node\NodeTypeInterface;
-use Drupal\Core\Form;
-
 function purl_form_menu_edit_form_alter(&$form, $form_state) {
   $providers = Provider::loadMultiple();
 
-  $options = [null => '-- None --'];
+  $options = [NULL => '-- None --'];
 
   foreach ($providers as $provider) {
-    $modifiers= [];
+    $modifiers = [];
     foreach ($provider->getProviderPlugin()->getModifierData() as $modifier => $value) {
       $modifiers[$provider->id() . ':' . $modifier] = $modifier;
     }
@@ -22,43 +21,43 @@ function purl_form_menu_edit_form_alter(&$form, $form_state) {
   }
 
   $form['purl'] = [
-    '#tree' => true,
+    '#tree' => TRUE,
     '#type' => 'fieldset',
     '#title' => 'Persistent URLs',
-    '#collapsible' => false,
-    '#collapsed' => false,
+    '#collapsible' => FALSE,
+    '#collapsed' => FALSE,
   ];
 
   $form['purl']['purl_provider'] = [
     '#type' => 'select',
     '#title' => 'PURL provider',
-    '#value' => null,
-    '#options' => $options
+    '#value' => NULL,
+    '#options' => $options,
   ];
 }
-
 function purl_form_menu_link_content_menu_link_content_form_alter(&$form, FormStateInterface $form_state) {
 
   $providers = Provider::loadMultiple();
 
   $menuLinkEntity = $form_state->getBuildInfo()['callback_object']->getEntity();
 
-  $selected = null;
+  $selected = NULL;
 
   if (isset($menuLinkEntity->purl_strip_context[0]) && $menuLinkEntity->purl_strip_context[0]->getValue()['value'] == 1) {
     $selected = '__STRIP__';
-  } elseif (isset($menuLinkEntity->purl_modifier[0]) && isset($menuLinkEntity->purl_provider[0])) {
+  }
+  elseif (isset($menuLinkEntity->purl_modifier[0]) && isset($menuLinkEntity->purl_provider[0])) {
     $selected = sprintf(
       '%s:%s',
       $menuLinkEntity->purl_provider[0]->getValue()['target_id'],
       $menuLinkEntity->purl_modifier[0]->getValue()['value']
-    );
+      );
   }
 
-  $options = [null => '-- Maintain context --', '__STRIP__' => 'Strip PURL context'];
+  $options = [NULL => '-- Maintain context --', '__STRIP__' => 'Strip PURL context'];
 
   foreach ($providers as $provider) {
-    $modifiers= [];
+    $modifiers = [];
     foreach ($provider->getProviderPlugin()->getModifierData() as $modifier => $value) {
       $modifiers[$provider->id() . ':' . $modifier] = $modifier;
     }
@@ -66,22 +65,21 @@ function purl_form_menu_link_content_menu_link_content_form_alter(&$form, FormSt
   }
 
   $form['purl'] = [
-    '#tree' => true,
+    '#tree' => TRUE,
     '#type' => 'fieldset',
     '#title' => 'Persistent URLs',
-    '#collapsible' => false,
-    '#collapsed' => false,
+    '#collapsible' => FALSE,
+    '#collapsed' => FALSE,
   ];
 
   $form['purl']['purl_modifier'] = [
     '#type' => 'select',
     '#title' => 'PURL modifier',
     '#options' => $options,
-    '#default_value' => $selected
+    '#default_value' => $selected,
   ];
   $form['#entity_builders'][] = 'purl_form_menu_link_content_menu_link_content_form_builder';
 }
-
 function purl_form_menu_link_content_menu_link_content_form_builder($entity_type, $type, &$form, FormStateInterface $form_state) {
 
   $menuLinkEntity = $form_state->getBuildInfo()['callback_object']->getEntity();
@@ -89,26 +87,29 @@ function purl_form_menu_link_content_menu_link_content_form_builder($entity_type
   if ($form_state->getValue('purl') && $form_state->getValue('purl')['purl_modifier']) {
     $purlSpec = $form_state->getValue('purl')['purl_modifier'];
     $tokens = explode(':', $purlSpec);
-    if (count($tokens) == 1) { // Must be `__STRIP__`
-      $provider = null;
-      $modifier = null;
-      $menuLinkEntity->set('purl_strip_context', true);
-      $form_state->getValue('link')[0]['options'] = ['purl_context' => false];
-    } else {
+    // Must be `__STRIP__`.
+    if (count($tokens) == 1) {
+      $provider = NULL;
+      $modifier = NULL;
+      $menuLinkEntity->set('purl_strip_context', TRUE);
+      $form_state->getValue('link')[0]['options'] = ['purl_context' => FALSE];
+    }
+    else {
       $providerKey = array_shift($tokens);
       $modifier = implode(':', $tokens);
       $provider = Provider::load($providerKey);
-      $menuLinkEntity->set('purl_strip_context', false);
+      $menuLinkEntity->set('purl_strip_context', FALSE);
       $form_state->getValue('link')[0]['options'] = [
-        'purl_context' => ['provider' => $providerKey, 'modifier' => $modifier]
+        'purl_context' => ['provider' => $providerKey, 'modifier' => $modifier],
       ];
     }
     $menuLinkEntity->set('purl_provider', $provider);
     $menuLinkEntity->set('purl_modifier', $modifier);
-  } else {
-    $menuLinkEntity->set('purl_strip_context', false);
-    $menuLinkEntity->set('purl_modifier', null);
-    $menuLinkEntity->set('purl_provider', null);
+  }
+  else {
+    $menuLinkEntity->set('purl_strip_context', FALSE);
+    $menuLinkEntity->set('purl_modifier', NULL);
+    $menuLinkEntity->set('purl_provider', NULL);
   }
 }
 
@@ -140,7 +141,7 @@ function purl_form_node_type_form_alter(&$form, $form_state) {
 
 /**
  * Entity form builder for the node type form to map some values to third party
- * settings
+ * settings.
  */
 function purl_form_node_type_form_builder($entity_type, NodeTypeInterface $type, &$form, $form_state) {
   if ($form_state->getValue('keep_context') == 1) {

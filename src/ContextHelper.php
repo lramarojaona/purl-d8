@@ -8,8 +8,7 @@ use Drupal\purl\Entity\Provider;
 use Drupal\purl\Plugin\Purl\Method\MethodInterface;
 use Symfony\Component\HttpFoundation\Request;
 
-class ContextHelper
-{
+class ContextHelper {
 
   /**
    * @var \Drupal\Core\Entity\EntityTypeManagerInterface
@@ -21,8 +20,7 @@ class ContextHelper
    *
    * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entity_type_manager
    */
-  public function __construct(EntityTypeManagerInterface $entity_type_manager)
-  {
+  public function __construct(EntityTypeManagerInterface $entity_type_manager) {
     $this->entityTypeManager = $entity_type_manager;
   }
 
@@ -30,12 +28,11 @@ class ContextHelper
    * @param array $contexts
    * @param $path
    * @param array $options
-   * @param Request|null $request
-   * @param BubbleableMetadata|null $metadata
+   * @param \Symfony\Component\HttpFoundation\Request|null $request
+   * @param \Drupal\Core\Render\BubbleableMetadata|null $metadata
    * @return mixed
    */
-  public function processOutbound(array $contexts, $path, array &$options, Request $request = null, BubbleableMetadata $metadata = null)
-  {
+  public function processOutbound(array $contexts, $path, array &$options, Request $request = NULL, BubbleableMetadata $metadata = NULL) {
 
     $result = $path;
 
@@ -46,11 +43,12 @@ class ContextHelper
         continue;
       }
 
-      $contextResult = null;
+      $contextResult = NULL;
 
       if ($context->getAction() == Context::ENTER_CONTEXT) {
         $contextResult = $context->getMethod()->enterContext($context->getModifier(), $result, $options);
-      } elseif ($context->getAction() == Context::EXIT_CONTEXT) {
+      }
+      elseif ($context->getAction() == Context::EXIT_CONTEXT) {
         $contextResult = $context->getMethod()->exitContext($context->getModifier(), $result, $options);
       }
 
@@ -67,8 +65,7 @@ class ContextHelper
    * @param array $options
    * @param $collect_bubblable_metadata
    */
-  public function preGenerate(array $contexts, $routeName, array &$parameters, array &$options, $collect_bubblable_metadata)
-  {
+  public function preGenerate(array $contexts, $routeName, array &$parameters, array &$options, $collect_bubblable_metadata) {
     $this->ensureContexts($contexts);
 
     /** @var Context $context */
@@ -80,7 +77,8 @@ class ContextHelper
 
       if ($context->getAction() == Context::ENTER_CONTEXT) {
         $context->getMethod()->preGenerateEnter($context->getModifier(), $routeName, $parameters, $options, $collect_bubblable_metadata);
-      } elseif ($context->getAction() == Context::EXIT_CONTEXT) {
+      }
+      elseif ($context->getAction() == Context::EXIT_CONTEXT) {
         $context->getMethod()->preGenerateExit($context->getModifier(), $routeName, $parameters, $options, $collect_bubblable_metadata);
       }
 
@@ -91,8 +89,7 @@ class ContextHelper
    * @param array $contexts
    * @return bool
    */
-  private function ensureContexts(array $contexts)
-  {
+  private function ensureContexts(array $contexts) {
     foreach ($contexts as $index => $context) {
       if (!$context instanceof Context) {
         throw new \InvalidArgumentException(sprintf('#%d is not a context.', $index + 1));
@@ -104,8 +101,7 @@ class ContextHelper
    * @param array $map
    * @return array
    */
-  public function createContextsFromMap(array $map)
-  {
+  public function createContextsFromMap(array $map) {
     if (count($map) === 0) {
       return [];
     }
@@ -116,4 +112,5 @@ class ContextHelper
       return new Context($map[$provider->id()], $provider->getMethodPlugin());
     }, $providers);
   }
+
 }

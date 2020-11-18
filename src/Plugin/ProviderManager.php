@@ -2,8 +2,6 @@
 
 namespace Drupal\purl\Plugin;
 
-use Drupal\Component\Plugin\Factory\DefaultFactory;
-use Drupal\purl\Plugin\Purl\Provider\ConfigurableInterface;
 use Drupal\Core\Cache\CacheBackendInterface;
 use Drupal\Core\Extension\ModuleHandlerInterface;
 use Drupal\Core\Plugin\DefaultPluginManager;
@@ -11,8 +9,7 @@ use Symfony\Component\DependencyInjection\ContainerAwareInterface;
 use Symfony\Component\DependencyInjection\ContainerAwareTrait;
 use Drupal\Core\Database\Connection;
 
-class ProviderManager extends DefaultPluginManager implements ContainerAwareInterface
-{
+class ProviderManager extends DefaultPluginManager implements ContainerAwareInterface {
 
   use ContainerAwareTrait;
 
@@ -30,8 +27,7 @@ class ProviderManager extends DefaultPluginManager implements ContainerAwareInte
     \Traversable $namespaces,
     CacheBackendInterface $cacheBackend,
     ModuleHandlerInterface $moduleHandler
-  )
-  {
+  ) {
     parent::__construct(
       'Plugin/Purl/Provider',
       $namespaces,
@@ -42,13 +38,11 @@ class ProviderManager extends DefaultPluginManager implements ContainerAwareInte
     $this->setCacheBackend($cacheBackend, 'purl_provider_plugins');
   }
 
-  public function setConnection(Connection $connection)
-  {
+  public function setConnection(Connection $connection) {
     $this->connection = $connection;
   }
 
-  public function getProvider($id)
-  {
+  public function getProvider($id) {
     if (!isset($this->providers[$id])) {
 
       $plugin = $this->createInstance($id);
@@ -62,4 +56,5 @@ class ProviderManager extends DefaultPluginManager implements ContainerAwareInte
 
     return $this->providers[$id];
   }
+
 }

@@ -1,8 +1,6 @@
 <?php
 
-
 namespace Drupal\purl\Utility;
-
 
 use Drupal\Core\GeneratedUrl;
 use Drupal\Core\PathProcessor\OutboundPathProcessorInterface;
@@ -12,14 +10,15 @@ use Drupal\purl\ContextHelper;
 use Drupal\purl\MatchedModifiers;
 use Symfony\Component\HttpFoundation\RequestStack;
 
-class PurlAwareUnroutedUrlAssembler extends UnroutedUrlAssembler
-{
+class PurlAwareUnroutedUrlAssembler extends UnroutedUrlAssembler {
+
   /**
-   * @var ContextHelper
+   * @var \Drupal\purl\ContextHelper
    */
   private $contextHelper;
+
   /**
-   * @var MatchedModifiers
+   * @var \Drupal\purl\MatchedModifiers
    */
   private $matchedModifiers;
 
@@ -35,11 +34,11 @@ class PurlAwareUnroutedUrlAssembler extends UnroutedUrlAssembler
     $this->matchedModifiers = $matchedModifiers;
   }
 
-  public function buildLocalUrl($uri, array $options = [], $collect_bubbleable_metadata = FALSE)
-  {
+  public function buildLocalUrl($uri, array $options = [], $collect_bubbleable_metadata = FALSE) {
     if (!array_key_exists('purl_context', $options)) {
       return parent::buildLocalUrl($uri, $options, $collect_bubbleable_metadata);
-    } else {
+    }
+    else {
       return $this->buildLocalUrlWithPurlContexts($uri, $options, $collect_bubbleable_metadata);
     }
   }
@@ -50,8 +49,7 @@ class PurlAwareUnroutedUrlAssembler extends UnroutedUrlAssembler
    * @param bool $collect_bubbleable_metadata
    * @return string
    */
-  private function buildLocalUrlWithPurlContexts($uri, array $options, $collect_bubbleable_metadata = FALSE)
-  {
+  private function buildLocalUrlWithPurlContexts($uri, array $options, $collect_bubbleable_metadata = FALSE) {
     $generated_url = $collect_bubbleable_metadata ? new GeneratedUrl() : NULL;
 
     $this->addOptionDefaults($options);
@@ -67,13 +65,14 @@ class PurlAwareUnroutedUrlAssembler extends UnroutedUrlAssembler
     // Add any subdirectory where Drupal is installed.
     $current_base_path = $request->getBasePath() . '/';
 
-    if (array_key_exists('purl_context', $options) && $options['purl_context'] === false) {
+    if (array_key_exists('purl_context', $options) && $options['purl_context'] === FALSE) {
       $contexts = $this->matchedModifiers->createContexts(Context::EXIT_CONTEXT);
-    } else {
+    }
+    else {
       $contexts = $this->contextHelper->createContextsFromMap($options['purl_context']);
     }
 
-    $uri = $this->contextHelper->processOutbound($contexts, $uri, $options, $request, null);
+    $uri = $this->contextHelper->processOutbound($contexts, $uri, $options, $request, NULL);
 
     if ($options['absolute']) {
 
@@ -112,4 +111,5 @@ class PurlAwareUnroutedUrlAssembler extends UnroutedUrlAssembler
     $url = $base . $options['script'] . $uri . $query . $options['fragment'];
     return $collect_bubbleable_metadata ? $generated_url->setGeneratedUrl($url) : $url;
   }
+
 }

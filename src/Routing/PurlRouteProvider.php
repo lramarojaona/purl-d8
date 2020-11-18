@@ -116,4 +116,5 @@ class PurlRouteProvider extends RouteProvider {
       return $routes;
     }
   }
+
 }

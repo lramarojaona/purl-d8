@@ -1,6 +1,10 @@
 <?php
 
 /**
+ * @file
+ */
+
+/**
  * Implements hook_schema().
  */
 function purl_schema() {
@@ -66,4 +70,3 @@ function purl_schema() {
 
   return $schema;
 }
-

@@ -8,22 +8,20 @@ use Drupal\purl\Modifier;
 /**
  * @todo Create caching version by wrapping `getProviderModifiers`
  */
-class ModifierIndex
-{
+class ModifierIndex {
+
   /**
-   * @return Modifier[]
+   * @return \Drupal\purl\Modifier[]
    */
-  public function findAll()
-  {
+  public function findAll() {
     return array_reduce(array_map([$this, 'getProviderModifiers'], Provider::loadMultiple()), 'array_merge', []);
   }
 
   /**
-   * @param Provider $provider
-   * @return Modifier[]
+   * @param \Drupal\purl\Entity\Provider $provider
+   * @return \Drupal\purl\Modifier[]
    */
-  public function getProviderModifiers(Provider $provider)
-  {
+  public function getProviderModifiers(Provider $provider) {
     $modifiers = [];
 
     foreach ($provider->getProviderPlugin()->getModifierData() as $key => $value) {
@@ -32,4 +30,5 @@ class ModifierIndex
 
     return $modifiers;
   }
+
 }

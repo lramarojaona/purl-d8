@@ -2,54 +2,42 @@
 
 namespace Drupal\purl\Routing;
 
-use Drupal\Core\PathProcessor\OutboundPathProcessorInterface;
-use Drupal\Core\RouteProcessor\OutboundRouteProcessorInterface;
-use Drupal\Core\Routing\RouteProviderInterface;
-use Drupal\Core\Routing\UrlGenerator as UrlGeneratorBase;
 use Drupal\Core\Routing\UrlGeneratorInterface;
 use Drupal\purl\Context;
 use Drupal\purl\ContextHelper;
-use Drupal\purl\Entity\Provider;
 use Drupal\purl\MatchedModifiers;
-use Drupal\purl\Plugin\Purl\Method\PreGenerateHookInterface;
-use Symfony\Component\HttpFoundation\RequestStack;
-use Symfony\Component\Routing\Exception\InvalidParameterException;
-use Symfony\Component\Routing\Exception\MissingMandatoryParametersException;
-use Symfony\Component\Routing\Exception\RouteNotFoundException;
 use Symfony\Component\Routing\RequestContext;
 
-
-// @TODO: Consider decorating @url_generator.non_bubbling instead.
-
-class UrlGenerator implements UrlGeneratorInterface
-{
+/**
+ * @TODO: Consider decorating @url_generator.non_bubbling instead.
+ */
+class UrlGenerator implements UrlGeneratorInterface {
 
   /**
-   * @var UrlGeneratorInterface
+   * @var \Drupal\Core\Routing\UrlGeneratorInterface
    */
   protected $urlGenerator;
 
   /**
-   * @var MatchedModifiers
+   * @var \Drupal\purl\MatchedModifiers
    */
   protected $matchedModifiers;
+
   /**
-   * @var ContextHelper
+   * @var \Drupal\purl\ContextHelper
    */
   private $contextHelper;
 
-  public function __construct(UrlGeneratorInterface $urlGenerator, MatchedModifiers $matchedModifiers, ContextHelper $contextHelper)
-  {
+  public function __construct(UrlGeneratorInterface $urlGenerator, MatchedModifiers $matchedModifiers, ContextHelper $contextHelper) {
     $this->urlGenerator = $urlGenerator;
     $this->matchedModifiers = $matchedModifiers;
     $this->contextHelper = $contextHelper;
   }
 
   /**
-   * @param RequestContext $context
+   * @param \Symfony\Component\Routing\RequestContext $context
    */
-  public function setContext(RequestContext $context)
-  {
+  public function setContext(RequestContext $context) {
     $this->urlGenerator->setContext($context);
   }
 
@@ -60,12 +48,11 @@ class UrlGenerator implements UrlGeneratorInterface
    * @param bool $collect_bubbleable_metadata
    * @return \Drupal\Core\GeneratedUrl|string
    */
-  public function generateFromRoute($name, $parameters = [], $options = [], $collect_bubbleable_metadata = FALSE)
-  {
-    $hostOverride = null;
-    $originalHost = null;
+  public function generateFromRoute($name, $parameters = [], $options = [], $collect_bubbleable_metadata = FALSE) {
+    $hostOverride = NULL;
+    $originalHost = NULL;
 
-    $action = array_key_exists('purl_context', $options) && $options['purl_context'] == false ?
+    $action = array_key_exists('purl_context', $options) && $options['purl_context'] == FALSE ?
       Context::EXIT_CONTEXT : Context::ENTER_CONTEXT;
 
     $this->contextHelper->preGenerate(
@@ -95,10 +82,9 @@ class UrlGenerator implements UrlGeneratorInterface
   /**
    * Gets the request context.
    *
-   * @return RequestContext The context
+   * @return \Symfony\Component\Routing\RequestContext The context
    */
-  public function getContext()
-  {
+  public function getContext() {
     return $this->urlGenerator->getContext();
   }
 
@@ -108,8 +94,7 @@ class UrlGenerator implements UrlGeneratorInterface
    * @param bool|string $referenceType
    * @return string
    */
-  public function generate($name, $parameters = [], $referenceType = self::ABSOLUTE_PATH)
-  {
+  public function generate($name, $parameters = [], $referenceType = self::ABSOLUTE_PATH) {
     return $this->urlGenerator->generate($name, $parameters, $referenceType);
   }
 
@@ -118,8 +103,7 @@ class UrlGenerator implements UrlGeneratorInterface
    * @param array $parameters
    * @return string
    */
-  public function getPathFromRoute($name, $parameters = [])
-  {
+  public function getPathFromRoute($name, $parameters = []) {
     return $this->urlGenerator->getPathFromRoute($name, $parameters);
   }
 
@@ -127,8 +111,7 @@ class UrlGenerator implements UrlGeneratorInterface
    * @param mixed $name
    * @return bool
    */
-  public function supports($name)
-  {
+  public function supports($name) {
     return $this->urlGenerator->supports($name);
   }
 
@@ -137,8 +120,8 @@ class UrlGenerator implements UrlGeneratorInterface
    * @param array $parameters
    * @return string
    */
-  public function getRouteDebugMessage($name, array $parameters = [])
-  {
+  public function getRouteDebugMessage($name, array $parameters = []) {
     return $this->urlGenerator->getRouteDebugMessage($name, $parameters);
   }
+
 }

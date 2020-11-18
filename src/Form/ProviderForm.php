@@ -9,9 +9,6 @@ use Drupal\Core\Entity\EntityForm;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Drupal\Core\Form\FormStateInterface;
 
-/**
- *
- */
 class ProviderForm extends EntityForm {
 
   /**

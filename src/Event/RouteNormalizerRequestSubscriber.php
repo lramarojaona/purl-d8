@@ -56,7 +56,7 @@ class RouteNormalizerRequestSubscriber extends RedirectRouteNormalizerRequestSub
 
       // Strip off query parameters added by the route such as a CSRF token.
       if (strpos($redirect_uri, '?') !== FALSE) {
-        $redirect_uri  = strtok($redirect_uri, '?');
+        $redirect_uri = strtok($redirect_uri, '?');
       }
 
       // Append back the request query string from $_SERVER.

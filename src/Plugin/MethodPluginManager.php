@@ -2,21 +2,18 @@
 
 namespace Drupal\purl\Plugin;
 
-use Drupal\Component\Plugin\Factory\DefaultFactory;
 use Drupal\Core\Cache\CacheBackendInterface;
 use Drupal\Core\Extension\ModuleHandlerInterface;
 use Drupal\Core\Plugin\DefaultPluginManager;
-use Drupal\purl\Plugin\Purl\Method\MethodInterface;
 use Symfony\Component\DependencyInjection\ContainerAwareInterface;
 use Symfony\Component\DependencyInjection\ContainerAwareTrait;
 
-class MethodPluginManager extends DefaultPluginManager implements MethodPluginManagerInterface, ContainerAwareInterface
-{
+class MethodPluginManager extends DefaultPluginManager implements MethodPluginManagerInterface, ContainerAwareInterface {
 
   use ContainerAwareTrait;
 
   /**
-   * @var MethodInterface[]
+   * @var \Drupal\purl\Plugin\Purl\Method\MethodInterface[]
    *
    * We store created instances here and return the right one when queried
    * for again. We only one one instance for each method plugin.
@@ -27,8 +24,7 @@ class MethodPluginManager extends DefaultPluginManager implements MethodPluginMa
     \Traversable $namespaces,
     CacheBackendInterface $cacheBackend,
     ModuleHandlerInterface $moduleHandler
-  )
-  {
+  ) {
     parent::__construct(
       'Plugin/Purl/Method',
       $namespaces,
@@ -42,10 +38,9 @@ class MethodPluginManager extends DefaultPluginManager implements MethodPluginMa
 
   /**
    * @param string $id
-   * @return MethodInterface
+   * @return \Drupal\purl\Plugin\Purl\Method\MethodInterface
    */
-  public function getMethodPlugin($id)
-  {
+  public function getMethodPlugin($id) {
     if (!isset($this->methodPlugins[$id])) {
       $plugin = $this->createInstance($id);
 
@@ -59,8 +54,7 @@ class MethodPluginManager extends DefaultPluginManager implements MethodPluginMa
     return $this->methodPlugins[$id];
   }
 
-  public function hasMethodPlugin($id)
-  {
+  public function hasMethodPlugin($id) {
     return $this->hasDefinition($id);
   }
 

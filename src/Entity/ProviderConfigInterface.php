@@ -2,11 +2,9 @@
 
 namespace Drupal\purl\Entity;
 
-use Drupal\purl\Plugin\Purl\Provider\ProviderInterface;
-use Drupal\purl\Plugin\Purl\Method\MethodInterface;
 
-interface ProviderConfigInterface
-{
+interface ProviderConfigInterface {
+
   /**
    * @return string
    */
@@ -23,12 +21,13 @@ interface ProviderConfigInterface
   public function getMethodKey();
 
   /**
-   * @return MethodInterface
+   * @return \Drupal\purl\Plugin\Purl\Method\MethodInterface
    */
   public function getMethodPlugin();
 
   /**
-   * @return ProviderInterface
+   * @return \Drupal\purl\Plugin\Purl\Provider\ProviderInterface
    */
   public function getProviderPlugin();
+
 }

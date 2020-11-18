@@ -2,26 +2,24 @@
 
 namespace Drupal\purl\Plugin\Purl\Identifier;
 
-class CompositeIdentifierProvider implements IdentifierProviderInterface
-{
-    /**
-     * @var array|IdentifierProviderInterface[]
-     */
-    protected $providers;
+class CompositeIdentifierProvider implements IdentifierProviderInterface {
+  /**
+   * @var array|IdentifierProviderInterface[]
+   */
+  protected $providers;
 
-    public function __construct(array $providers)
-    {
-        $this->providers = $providers;
+  public function __construct(array $providers) {
+    $this->providers = $providers;
+  }
+
+  public function getIdentifiers() {
+    $identifiers = [];
+
+    foreach ($this->providers as $provider) {
+      $identifiers = array_merge($identifiers, $provider->getIdentifiers());
     }
 
-    public function getIdentifiers()
-    {
-        $identifiers = [];
+    return $identifiers;
+  }
 
-        foreach ($this->providers as $provider) {
-            $identifiers = array_merge($identifiers, $provider->getIdentifiers());
-        }
-
-        return $identifiers;
-    }
 }

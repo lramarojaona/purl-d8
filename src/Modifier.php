@@ -2,12 +2,10 @@
 
 namespace Drupal\purl;
 
-use Drupal\purl\Entity\Provider;
 use Drupal\purl\Plugin\Purl\Method\MethodInterface;
 use Drupal\purl\Plugin\Purl\Provider\ProviderInterface;
 
-class Modifier
-{
+class Modifier {
   /**
    * @var string
    */
@@ -19,16 +17,16 @@ class Modifier
   private $value;
 
   /**
-   * @var MethodInterface
+   * @var \Drupal\purl\Plugin\Purl\Method\MethodInterface
    */
   private $method;
+
   /**
-   * @var ProviderInterface
+   * @var \Drupal\purl\Entity\ProviderInterface
    */
   private $provider;
 
-  public function __construct($modifierKey, $value, MethodInterface $method, ProviderInterface $provider)
-  {
+  public function __construct($modifierKey, $value, MethodInterface $method, ProviderInterface $provider) {
     $this->modifierKey = $modifierKey;
     $this->value = $value;
     $this->method = $method;
@@ -38,32 +36,29 @@ class Modifier
   /**
    * @return string
    */
-  public function getModifierKey()
-  {
+  public function getModifierKey() {
     return $this->modifierKey;
   }
 
   /**
    * @return string
    */
-  public function getValue()
-  {
+  public function getValue() {
     return $this->value;
   }
 
   /**
-   * @return MethodInterface
+   * @return \Drupal\purl\Plugin\Purl\Method\MethodInterface
    */
-  public function getMethod()
-  {
+  public function getMethod() {
     return $this->method;
   }
 
   /**
-   * @return ProviderInterface
+   * @return \Drupal\purl\Entity\ProviderInterface
    */
-  public function getProvider()
-  {
+  public function getProvider() {
     return $this->provider;
   }
+
 }

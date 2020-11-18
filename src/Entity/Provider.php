@@ -5,8 +5,6 @@ namespace Drupal\purl\Entity;
 use Drupal;
 use Drupal\Core\Config\Entity\ConfigEntityBase;
 use Drupal\Core\Entity\EntityStorageInterface;
-use Drupal\purl\Modifier;
-use Drupal\purl\Plugin\Purl\Method\MethodInterface;
 use Drupal\purl\Plugin\Purl\Provider\ProviderInterface as ProviderPluginInterface;
 use Drupal\purl\Plugin\Purl\Method\MethodInterface as MethodPluginInterface;
 use Drupal\purl\Plugin\Purl\Provider\ProviderInterface;
@@ -35,8 +33,7 @@ use Drupal\purl\Plugin\Purl\Provider\ProviderInterface;
  *  }
  * )
  */
-class Provider extends ConfigEntityBase implements ProviderConfigInterface, ProviderInterface
-{
+class Provider extends ConfigEntityBase implements ProviderConfigInterface, ProviderInterface {
 
   protected static $providerManager;
 
@@ -49,72 +46,63 @@ class Provider extends ConfigEntityBase implements ProviderConfigInterface, Prov
   /**
    * @return int|null|string
    */
-  public function getProviderKey()
-  {
+  public function getProviderKey() {
     return $this->id();
   }
 
   /**
    * @return mixed|null|string
    */
-  public function getLabel()
-  {
+  public function getLabel() {
     return $this->label();
   }
 
   /**
    * @return mixed|null
    */
-  public function getMethodKey()
-  {
+  public function getMethodKey() {
     return $this->get('method_key');
   }
 
   /**
    * @return null
    */
-  public function id()
-  {
-    return $this->get('provider_key') ?: null;
+  public function id() {
+    return $this->get('provider_key') ?: NULL;
   }
 
   /**
-   * @param MethodPluginInterface $method
+   * @param \Drupal\purl\Plugin\Purl\Method\MethodInterface $method
    */
-  private function setMethodPlugin(MethodPluginInterface $method)
-  {
+  private function setMethodPlugin(MethodPluginInterface $method) {
     $this->methodPlugin = $method;
   }
 
   /**
-   * @param ProviderPluginInterface $provider
+   * @param \Drupal\purl\Plugin\Purl\Provider\ProviderInterface $provider
    */
-  private function setProviderPlugin(ProviderPluginInterface $provider)
-  {
+  private function setProviderPlugin(ProviderPluginInterface $provider) {
     $this->providerPlugin = $provider;
   }
 
   /**
-   * @return ProviderInterface
+   * @return \Drupal\purl\Plugin\Purl\Provider\ProviderInterface
    */
-  public function getProviderPlugin()
-  {
+  public function getProviderPlugin() {
     return $this->providerPlugin;
   }
 
   /**
-   * @return MethodInterface
+   * @return \Drupal\purl\Plugin\Purl\Method\MethodInterface
    */
-  public function getMethodPlugin()
-  {
+  public function getMethodPlugin() {
     return $this->methodPlugin;
   }
 
   /**
    * {@inheritdoc}
    */
-  public static function postLoad(EntityStorageInterface $storage, array &$entities)
-  {
+  public static function postLoad(EntityStorageInterface $storage, array &$entities) {
     foreach ($entities as $entity) {
       $entity->setMethodPlugin(self::getMethodManager()->getMethodPlugin($entity->getMethodKey()));
       $entity->setProviderPlugin(self::getProviderManager()->getProvider($entity->id()));
@@ -122,22 +110,20 @@ class Provider extends ConfigEntityBase implements ProviderConfigInterface, Prov
   }
 
   /**
-   * @return Drupal\purl\Plugin\ProviderManager
+   * @return \Drupal\purl\Plugin\ProviderManager
    */
-  protected static function getProviderManager()
-  {
-    if (static::$providerManager === null) {
+  protected static function getProviderManager() {
+    if (static::$providerManager === NULL) {
       static::$providerManager = Drupal::service('purl.plugin.provider_manager');
     }
     return static::$providerManager;
   }
 
   /**
-   * @return Drupal\purl\Plugin\MethodPluginManager
+   * @return \Drupal\purl\Plugin\MethodPluginManager
    */
-  protected static function getMethodManager()
-  {
-    if (static::$methodManager === null) {
+  protected static function getMethodManager() {
+    if (static::$methodManager === NULL) {
       static::$methodManager = Drupal::service('purl.plugin.method_manager');
     }
     return static::$methodManager;
@@ -146,15 +132,12 @@ class Provider extends ConfigEntityBase implements ProviderConfigInterface, Prov
   /**
    * @return array
    */
-  public function getModifierData()
-  {
+  public function getModifierData() {
     return $this->getProviderPlugin()->getModifierData();
   }
 
-  public function getProviderId()
-  {
+  public function getProviderId() {
     return $this->getProviderPlugin()->getProviderId();
   }
+
 }
-
-
