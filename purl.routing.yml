@@ -1,21 +1,4 @@
-# # Admin screens
-
-# purl.admin:
-#   path: admin/config/search/purl
-#   defaults:
-#     _controller: Drupal\purl\Controller\ProvidersController::providers
-#     _title: Persistent URLs
-#   requirements:
-#     _permission: 'administer'
-
-# #purl.admin.methods:
-#   #path: admin/config/search/purl/methods
-#   #defaults:
-#     #_controller: Drupal\purl\Controller\ManageMethodsController::methods
-#     #_title: PURL Methods
-#   #requirements:
-#     #_permission: 'administer'
-
+# Admin screens
 purl.modifiers:
    path: admin/config/search/purl/modifiers
    defaults:
@@ -23,17 +6,8 @@ purl.modifiers:
      _title: PURL Modifiers
    requirements:
      _permission: 'administer'
+
  # POST actions
-
-# purl.admin.save_providers_config:
-#   path: admin/config/search/purl/save-settings
-#   defaults:
-#     _controller: Drupal\purl\Controller\ProvidersController::saveProviderSettings
-#     _title: Persistent URLs
-#   requirements:
-#     _permission: 'administer'
-
-
 entity.purl_provider.collection:
   path: '/admin/config/search/purl'
   defaults:

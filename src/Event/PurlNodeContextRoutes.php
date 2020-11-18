@@ -2,7 +2,9 @@
 
 namespace Drupal\purl\Event;
 
-use Drupal\Core\Render\Element\Url;
+use Drupal\Core\Logger\LoggerChannelFactoryInterface;
+use Drupal\Core\Messenger\MessengerInterface;
+use Drupal\Core\Url;
 use Drupal\Core\Routing\RouteMatchInterface;
 use Drupal\Core\Routing\TrustedRedirectResponse;
 use Drupal\purl\PurlEvents;
@@ -28,24 +30,54 @@ class PurlNodeContextRoutes implements EventSubscriberInterface {
    */
   protected $entityStorage;
 
+  /**
+   * The route match.
+   *
+   * @var \Drupal\Core\Routing\RouteMatchInterface
+   */
   protected $routeMatch;
 
   /**
-   * @var MatchedModifiers
+   * The match modifiers.
+   *
+   * @var \Drupal\purl\MatchedModifiers
    */
   protected $matchedModifiers;
 
   /**
+   * The messenger.
+   *
+   * @var \Drupal\Core\Messenger\MessengerInterface
+   */
+  protected $messenger;
+
+  /**
+   * The logger.
+   *
+   * @var \Drupal\Core\Logger\LoggerChannelInterface
+   */
+  protected $logger;
+
+  /**
    * PurlNodeContextRoutes constructor.
    *
-   * @param EntityTypeManagerInterface $entity_type_manager
-   * @param RouteMatchInterface        $route_match
-   * @param MatchedModifiers           $matchedModifiers
+   * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entity_type_manager
+   *   The entity type manager.
+   * @param \Drupal\Core\Routing\RouteMatchInterface $route_match
+   *   The route match.
+   * @param \Drupal\purl\MatchedModifiers $matchedModifiers
+   *   The match modifiers.
+   * @param \Drupal\Core\Messenger\MessengerInterface $messenger
+   *   The messenger.
+   * @param \Drupal\Core\Logger\LoggerChannelFactoryInterface $loggerChannelFactory
+   *   The logger channel factory.
    */
-  public function __construct(EntityTypeManagerInterface $entity_type_manager, RouteMatchInterface $route_match, MatchedModifiers $matchedModifiers) {
+  public function __construct(EntityTypeManagerInterface $entity_type_manager, RouteMatchInterface $route_match, MatchedModifiers $matchedModifiers, MessengerInterface $messenger, LoggerChannelFactoryInterface $loggerChannelFactory) {
     $this->entityStorage = $entity_type_manager->getStorage('node_type');
     $this->routeMatch = $route_match;
     $this->matchedModifiers = $matchedModifiers;
+    $this->messenger = $messenger;
+    $this->logger = $loggerChannelFactory->get('redirect');
   }
 
   /**
@@ -58,18 +90,17 @@ class PurlNodeContextRoutes implements EventSubscriberInterface {
     $route_options = $this->routeMatch->getRouteObject()->getOptions();
     $isAdminRoute = array_key_exists('_admin_route', $route_options) && $route_options['_admin_route'];
 
-    if (!$isAdminRoute
-      && $matched = $this->matchedModifiers->getMatched()
-      && $entity = $this->routeMatch->getParameter('node')
-    ) {
+    $matched = $this->matchedModifiers->getMatched();
+    $entity = $this->routeMatch->getParameter('node');
+    if (!$isAdminRoute && $matched && $entity) {
       $node_type = $this->entityStorage->load($entity->bundle());
       $purl_settings = $node_type->getThirdPartySettings('purl');
 
-      if ($entity->isPublished()) {
-        if (!isset($purl_settings['keep_context']) || !$purl_settings['keep_context']) {
-          $url = \Drupal\Core\Url::fromRoute($this->routeMatch->getRouteName(), $this->routeMatch->getRawParameters()->all(), [
+      if (!isset($purl_settings['keep_context']) || !$purl_settings['keep_context']) {
+        if ($entity->isPublished()) {
+          $url = Url::fromRoute($this->routeMatch->getRouteName(), $this->routeMatch->getRawParameters()->all(), [
             'host' => Settings::get('purl_base_domain'),
-            'absolute' => TRUE
+            'absolute' => TRUE,
           ]);
           try {
             $redirect_response = new TrustedRedirectResponse($url->toString());
@@ -81,7 +112,7 @@ class PurlNodeContextRoutes implements EventSubscriberInterface {
             return;
           }
           catch (RedirectLoopException $e) {
-            \Drupal::logger('redirect')->warning($e->getMessage());
+            $this->logger->warning($e->getMessage());
             $response = new Response();
             $response->setStatusCode(503);
             $response->setContent('Service unavailable');
@@ -89,12 +120,11 @@ class PurlNodeContextRoutes implements EventSubscriberInterface {
             return;
           }
         }
-      } else {
-        if (!isset($purl_settings['keep_context']) || !$purl_settings['keep_context']) {
-          drupal_set_message(
+        else {
+          $this->messenger->addMessage(
             $entity->label() . ' is currently unpublished. This node is set to remove the context, anonymous users will be redirected to the main base domain.',
             'status',
-            true
+            TRUE
           );
         }
       }
@@ -104,9 +134,10 @@ class PurlNodeContextRoutes implements EventSubscriberInterface {
   /**
    * {@inheritdoc}
    */
-  static function getSubscribedEvents() {
+  public static function getSubscribedEvents() {
     // Run after \Drupal\system\EventSubscriber\AdminRouteSubscriber.
     $events[KernelEvents::REQUEST][] = ['purlCheckNodeContext', -21];
     return $events;
   }
+
 }

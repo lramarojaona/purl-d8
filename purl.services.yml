@@ -25,7 +25,7 @@ services:
 
   purl.purl_node_context_routes:
     class: Drupal\purl\Event\PurlNodeContextRoutes
-    arguments: ['@entity_type.manager', '@current_route_match', '@purl.matched_modifiers']
+    arguments: ['@entity_type.manager', '@current_route_match', '@purl.matched_modifiers', '@messenger', '@logger.factory']
     tags:
       - { name: event_subscriber }
 
@@ -66,10 +66,6 @@ services:
 
   purl.matched_modifiers:
     class: Drupal\purl\MatchedModifiers
-
-  purl.menu_link_tree_manipulators:
-    class: Drupal\purl\Menu\PurlMenuLinkTreeManipulators
-    arguments: ['@purl.matched_modifiers']
 
   purl.context_helper:
     class: Drupal\purl\ContextHelper
