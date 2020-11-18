@@ -30,10 +30,10 @@ class RebuildIndex implements EventSubscriberInterface
 
   public static function getSubscribedEvents()
   {
-    return array(
+    return [
       // RequestSubscriber comes in at 50. We need to go before it.
-      KernelEvents::REQUEST => array('onRequest', 51),
-    );
+      KernelEvents::REQUEST => ['onRequest', 51],
+    ];
   }
 
   public function onRequest(GetResponseEvent $event, $eventName, EventDispatcherInterface $dispatcher)

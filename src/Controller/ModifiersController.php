@@ -43,15 +43,15 @@ class ModifiersController extends BaseController
 
   public function modifiers(Request $request)
   {
-    $build = array();
+    $build = [];
 
-    $headers = array('provider', 'modifier', 'value');
+    $headers = ['provider', 'modifier', 'value'];
 
     $headers = array_map(function ($header) {
-      return array('data' => t($header));
+      return ['data' => t($header)];
     }, $headers);
 
-    $rows = array();
+    $rows = [];
 
     foreach ($this->modifierIndex->findAll() as $modifier) {
 
@@ -61,36 +61,36 @@ class ModifiersController extends BaseController
         continue;
       }
 
-      $row = array();
+      $row = [];
 
-      $row[] = array(
+      $row[] = [
         'data' => $provider->getLabel(),
-      );
+      ];
 
-      $row[] = array(
-        'data' => array(
+      $row[] = [
+        'data' => [
           '#type' => 'html_tag',
           '#tag' => 'code',
           '#value' => $modifier->getModifierKey(),
-        ),
-      );
+        ],
+      ];
 
-      $row[] = array(
-        'data' => array(
+      $row[] = [
+        'data' => [
           '#type' => 'html_tag',
           '#tag' => 'code',
           '#value' => $this->stringify($modifier->getValue()),
-        ),
-      );
+        ],
+      ];
 
       $rows[] = $row;
     }
 
-    $build['modifiers'] = array(
+    $build['modifiers'] = [
       '#theme' => 'table',
       '#header' => $headers,
       '#rows' => $rows,
-    );
+    ];
 
     return $build;
   }

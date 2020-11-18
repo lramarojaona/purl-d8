@@ -60,7 +60,7 @@ class UrlGenerator implements UrlGeneratorInterface
    * @param bool $collect_bubbleable_metadata
    * @return \Drupal\Core\GeneratedUrl|string
    */
-  public function generateFromRoute($name, $parameters = array(), $options = array(), $collect_bubbleable_metadata = FALSE)
+  public function generateFromRoute($name, $parameters = [], $options = [], $collect_bubbleable_metadata = FALSE)
   {
     $hostOverride = null;
     $originalHost = null;
@@ -108,7 +108,7 @@ class UrlGenerator implements UrlGeneratorInterface
    * @param bool|string $referenceType
    * @return string
    */
-  public function generate($name, $parameters = array(), $referenceType = self::ABSOLUTE_PATH)
+  public function generate($name, $parameters = [], $referenceType = self::ABSOLUTE_PATH)
   {
     return $this->urlGenerator->generate($name, $parameters, $referenceType);
   }
@@ -118,7 +118,7 @@ class UrlGenerator implements UrlGeneratorInterface
    * @param array $parameters
    * @return string
    */
-  public function getPathFromRoute($name, $parameters = array())
+  public function getPathFromRoute($name, $parameters = [])
   {
     return $this->urlGenerator->getPathFromRoute($name, $parameters);
   }
@@ -137,7 +137,7 @@ class UrlGenerator implements UrlGeneratorInterface
    * @param array $parameters
    * @return string
    */
-  public function getRouteDebugMessage($name, array $parameters = array())
+  public function getRouteDebugMessage($name, array $parameters = [])
   {
     return $this->urlGenerator->getRouteDebugMessage($name, $parameters);
   }

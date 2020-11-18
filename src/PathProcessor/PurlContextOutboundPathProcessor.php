@@ -26,7 +26,7 @@ class PurlContextOutboundPathProcessor implements OutboundPathProcessorInterface
       $this->contextHelper = $contextHelper;
     }
 
-    public function processOutbound($path, &$options = array(), Request $request = NULL, BubbleableMetadata $bubbleable_metadata = NULL)
+    public function processOutbound($path, &$options = [], Request $request = NULL, BubbleableMetadata $bubbleable_metadata = NULL)
     {
         if (array_key_exists('purl_context', $options) && $options['purl_context'] == false) {
 

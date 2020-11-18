@@ -12,7 +12,7 @@ use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 class PurlCacheContext implements CacheContextInterface, EventSubscriberInterface
 {
 
-    protected $contexts = array();
+    protected $contexts = [];
 
     /**
      * Returns the label of the cache context.
@@ -80,7 +80,7 @@ class PurlCacheContext implements CacheContextInterface, EventSubscriberInterfac
     public static function getSubscribedEvents()
     {
         return [
-            PurlEvents::MODIFIER_MATCHED => array('onMatch'),
+            PurlEvents::MODIFIER_MATCHED => ['onMatch'],
         ];
     }
 

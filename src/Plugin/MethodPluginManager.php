@@ -21,7 +21,7 @@ class MethodPluginManager extends DefaultPluginManager implements MethodPluginMa
    * We store created instances here and return the right one when queried
    * for again. We only one one instance for each method plugin.
    */
-  protected $methodPlugins = array();
+  protected $methodPlugins = [];
 
   public function __construct(
     \Traversable $namespaces,

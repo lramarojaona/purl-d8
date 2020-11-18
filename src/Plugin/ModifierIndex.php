@@ -15,7 +15,7 @@ class ModifierIndex
    */
   public function findAll()
   {
-    return array_reduce(array_map(array($this, 'getProviderModifiers'), Provider::loadMultiple()), 'array_merge', []);
+    return array_reduce(array_map([$this, 'getProviderModifiers'], Provider::loadMultiple()), 'array_merge', []);
   }
 
   /**

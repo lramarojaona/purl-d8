@@ -38,10 +38,10 @@ class RequestSubscriber implements EventSubscriberInterface
 
   public static function getSubscribedEvents()
   {
-    return array(
+    return [
       // RouterListener comes in at 32. We need to go before it.
-      KernelEvents::REQUEST => array('onRequest', 50),
-    );
+      KernelEvents::REQUEST => ['onRequest', 50],
+    ];
   }
 
   /**
@@ -63,7 +63,7 @@ class RequestSubscriber implements EventSubscriberInterface
     $modifiers = $this->getModifiers();
     $original_uri = $request->getRequestUri();
 
-    $matches = array();
+    $matches = [];
 
     foreach ($modifiers as $modifier) {
 
@@ -72,13 +72,13 @@ class RequestSubscriber implements EventSubscriberInterface
       $method = $modifier->getMethod();
 
       if ($method->contains($request, $modifierKey)) {
-        $matches[$provider->getProviderId()] = array(
+        $matches[$provider->getProviderId()] = [
           'method' => $method,
           'modifier' => $modifierKey,
           'provider_key' => $provider->getProviderId(),
           'provider' => $modifier->getProvider(),
           'value' => $modifier->getValue()
-        );
+        ];
       }
     }
 

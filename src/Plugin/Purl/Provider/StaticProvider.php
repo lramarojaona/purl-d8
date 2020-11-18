@@ -14,12 +14,12 @@ class StaticProvider extends ProviderAbstract
 {
     public function getModifierData()
     {
-        return array(
+        return [
             'un' => 1,
             'deux' => 2,
             'trois' => 3,
             'quatre' => 4,
             'cinq' => 5,
-        );
+        ];
     }
 }

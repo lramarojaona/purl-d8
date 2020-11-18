@@ -123,17 +123,17 @@ function purl_form_node_type_form_alter(&$form, $form_state) {
   /* @var Drupal\node\NodeInterface $node */
   $node_type = $form_state->getFormObject()->getEntity();
 
-  $form['purl'] = array(
+  $form['purl'] = [
     '#type' => 'details',
     '#title' => t('PURL settings'),
     '#group' => 'additional_settings',
-  );
-  $form['purl']['keep_context'] = array(
+  ];
+  $form['purl']['keep_context'] = [
     '#type' => 'checkbox',
     '#title' => t('Keep context of the node.'),
     '#default_value' => $node_type->getThirdPartySetting('purl', 'keep_context', 0),
     '#description' => t('This allows a node-type PURL context.'),
-  );
+  ];
 
   $form['#entity_builders'][] = 'purl_form_node_type_form_builder';
 }

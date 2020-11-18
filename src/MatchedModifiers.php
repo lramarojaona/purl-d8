@@ -9,7 +9,7 @@ class MatchedModifiers
   /**
    * @var ModifierMatchedEvent[]
    */
-  private $matched = array();
+  private $matched = [];
 
   /**
    * @return Event\ModifierMatchedEvent[]

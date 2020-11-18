@@ -28,7 +28,7 @@ class PurlContextOutboundRouteProcessor implements OutboundRouteProcessorInterfa
   /**
    * @var ModifierMatchedEvent[]
    */
-  private $events = array();
+  private $events = [];
 
   public function __construct(MethodPluginManager $manager)
   {
@@ -53,7 +53,7 @@ class PurlContextOutboundRouteProcessor implements OutboundRouteProcessorInterfa
   public static function getSubscribedEvents()
   {
     return [
-      PurlEvents::MODIFIER_MATCHED => array('onModifierMatched', 300),
+      PurlEvents::MODIFIER_MATCHED => ['onModifierMatched', 300],
     ];
   }
 }

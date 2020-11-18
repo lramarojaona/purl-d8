@@ -7,62 +7,62 @@ function purl_schema() {
   // Flush all caches to prevent the 'Plugin not found'-exception on install.
   drupal_flush_all_caches();
 
-  $schema['purl_providers_settings'] = array(
-    'fields' => array(
-      'provider' => array(
+  $schema['purl_providers_settings'] = [
+    'fields' => [
+      'provider' => [
         'description' => '',
         'type' => 'varchar',
         'length' => 255,
         'not null' => TRUE,
-      ),
-      'method' => array(
+      ],
+      'method' => [
         'description' => '',
         'type' => 'varchar',
         'length' => 255,
         'not null' => TRUE,
-      ),
-      'settings' => array(
+      ],
+      'settings' => [
         'description' => '',
         'type' => 'text',
         'not null' => TRUE,
         'size' => 'medium',
-      ),
-      'rebuild' => array(
+      ],
+      'rebuild' => [
         'description' => '',
         'type' => 'int',
         'size' => 'tiny',
         'not null' => TRUE,
         'default' => 0,
-      ),
-    ),
-    'primary key' => array(array('provider', 191)),
+      ],
+    ],
+    'primary key' => [['provider', 191]],
     'description' => 'PURL provider settings',
-    );
+  ];
 
-  $schema['purl_modifiers'] = array(
-    'fields' => array(
-      'provider' => array(
+  $schema['purl_modifiers'] = [
+    'fields' => [
+      'provider' => [
         'description' => '',
         'type' => 'varchar',
         'length' => 255,
         'not null' => TRUE,
-      ),
-      'modifier' => array(
+      ],
+      'modifier' => [
         'description' => '',
         'type' => 'varchar',
         'length' => 255,
         'not null' => TRUE,
-      ),
-      'value' => array(
+      ],
+      'value' => [
         'description' => '',
         'type' => 'text',
         'not null' => TRUE,
         'mysql_type' => 'mediumtext',
-      ),
-    ),
-    'primary key' => array(array('provider', 191), array('modifier', 191)),
+      ],
+    ],
+    'primary key' => [['provider', 191], ['modifier', 191]],
     'description' => 'Index of PURL modifiers',
-  );
+  ];
 
   return $schema;
 }

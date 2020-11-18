@@ -16,7 +16,7 @@ class CompositeIdentifierProvider implements IdentifierProviderInterface
 
     public function getIdentifiers()
     {
-        $identifiers = array();
+        $identifiers = [];
 
         foreach ($this->providers as $provider) {
             $identifiers = array_merge($identifiers, $provider->getIdentifiers());

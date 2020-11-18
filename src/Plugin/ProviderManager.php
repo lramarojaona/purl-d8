@@ -22,7 +22,7 @@ class ProviderManager extends DefaultPluginManager implements ContainerAwareInte
    * We store created instances here and return the right one when queried
    * for again. We only one one instance for each method plugin.
    */
-  protected $providers = array();
+  protected $providers = [];
 
   protected $connection;
 
