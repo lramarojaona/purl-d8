@@ -27,6 +27,10 @@ use Drupal\purl\Plugin\Purl\Provider\ProviderInterface;
  *    "id" = "provider_key",
  *    "label" = "label"
  *  },
+ *  config_export = {
+ *    "provider_key",
+ *    "label"
+ *  },
  *  links = {
  *    "edit-form" = "/admin/config/search/purl/provider/{purl}",
  *    "delete-form" = "/admin/config/search/purl/provider/{purl}/delete"
