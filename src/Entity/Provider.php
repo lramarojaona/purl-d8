@@ -29,7 +29,8 @@ use Drupal\purl\Plugin\Purl\Provider\ProviderInterface;
  *  },
  *  config_export = {
  *    "provider_key",
- *    "label"
+ *    "label",
+ *    "method_key"
  *  },
  *  links = {
  *    "edit-form" = "/admin/config/search/purl/provider/{purl}",
