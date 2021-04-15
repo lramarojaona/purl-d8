@@ -1,0 +1,6 @@
+{
+  "name": "lramarojaona/purl",
+  "type": "drupal-module",
+  "description": "Persistent URL module for Drupal 8+",
+  "require": {}
+}
